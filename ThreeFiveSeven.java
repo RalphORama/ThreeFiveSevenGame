@@ -1,3 +1,5 @@
+// TODO: Implement turn system
+
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
@@ -18,9 +20,9 @@ public class ThreeFiveSeven extends JFrame
   
   // create arrays of buttons so we can easily procedually add them to
   // the GridBag later
-  JButton[] threeColumn = new JButton[3];
-  JButton[] fiveColumn  = new JButton[5];
-  JButton[] sevenColumn = new JButton[7];
+  XButton[] threeColumn = new XButton[3];
+  XButton[] fiveColumn  = new XButton[5];
+  XButton[] sevenColumn = new XButton[7];
   JButton   reset       = new JButton("Reset");
   
   JCheckBox selectMultipleBox = new JCheckBox("Select Multiple", null, false);
@@ -35,29 +37,6 @@ public class ThreeFiveSeven extends JFrame
   
   public void setup()
   {
-    // use for loops to create buttons and add them to their respective arrays
-    for ( int i = 0; i < 3; i++ )
-    {
-      // set the title to the number (will probably change, just for debugging
-      threeColumn[i] = new JButton(String.valueOf(i + 1));
-      // add actionlisteners so we can tell if the user's clicked a button
-      threeColumn[i].addActionListener(this);
-      // make it so there's no dotted border around the button when it's clicked
-      threeColumn[i].setFocusPainted(false);
-    }
-    for ( int i = 0; i < 5; i++ )
-    {
-      fiveColumn[i] = new JButton(String.valueOf(i + 1));
-      fiveColumn[i].addActionListener(this);
-      fiveColumn[i].setFocusPainted(false);
-    }
-    for ( int i = 0; i < 7; i++ )
-    {
-      sevenColumn[i] = new JButton(String.valueOf(i + 1));
-      sevenColumn[i].addActionListener(this);
-      sevenColumn[i].setFocusPainted(false);
-    }
-    
     // set up content pane
     c.setBackground(Color.white);
     
@@ -76,6 +55,15 @@ public class ThreeFiveSeven extends JFrame
     // add all the buttons we created earlier to the gridbaglayout
     for ( int i = 0; i < 3; i++ )
     {
+      // set the title to the number (will probably change, just for debugging
+      threeColumn[i] = new XButton( String.valueOf(i + 1), 3 );
+      // add actionlisteners so we can tell if the user's clicked a button
+      threeColumn[i].addActionListener(this);
+      // make it so there's no dotted border around the button when it's clicked
+      threeColumn[i].setFocusPainted(false);
+      // make it so the button isn't default capable, isn't auto selected
+      threeColumn[i].setDefaultCapable(false);
+      
       // add to the left column
       constraints.gridx = 0;
       // add to each row, but pad so all buttons are aligned to the bottom of the grid,
@@ -90,6 +78,11 @@ public class ThreeFiveSeven extends JFrame
     }
     for ( int i = 0; i < 5; i++ )
     {
+      fiveColumn[i] = new XButton( String.valueOf(i + 1), 5 );
+      fiveColumn[i].addActionListener(this);
+      fiveColumn[i].setFocusPainted(false);
+      fiveColumn[i].setDefaultCapable(false);
+      
       constraints.gridx = 1;
       constraints.gridy = 2 + i;
       constraints.fill = GridBagConstraints.BOTH;
@@ -98,6 +91,11 @@ public class ThreeFiveSeven extends JFrame
     }
     for ( int i = 0; i < 7; i++ )
     {
+      sevenColumn[i] = new XButton( String.valueOf(i + 1), 7 );
+      sevenColumn[i].addActionListener(this);
+      sevenColumn[i].setFocusPainted(false);
+      sevenColumn[i].setDefaultCapable(false);
+      
       constraints.gridx = 2;
       constraints.gridy = i;
       constraints.fill = GridBagConstraints.BOTH;
@@ -169,8 +167,11 @@ public class ThreeFiveSeven extends JFrame
       AbstractButton abutton = (AbstractButton) e.getSource();
       this.multiSelectState = abutton.getModel().isSelected();
       
-      if (this.multiSelectState)
-        JOptionPane.showMessageDialog(null, "Not working yet.");
+      if ( multiSelectState == false )
+      {
+        toggleColumns( 3, true );
+        toggleColumns( 7, true );
+      }
     }
     
     if ( e.getActionCommand() == "Reset" )
@@ -184,21 +185,52 @@ public class ThreeFiveSeven extends JFrame
       // if a button is clicked and multiple select is enabled
       if ( multiSelectState )
       {
-        JButton b = (JButton)e.getSource();
+        // get what column the XButton is in, then disable all the other buttons
+        XButton b = (XButton)e.getSource();
+        toggleColumns( b.getColumn(), false );
       }
       
       // if a button is clicked and multi-select isn't enabled
       else if ( !multiSelectState )
       {
         // get the button that was clicked
-        JButton button = (JButton)e.getSource();
+        XButton button = (XButton)e.getSource();
         
         addPlaceHolderForButton( button, p );
       }
     }
   }
   
-  public void addPlaceHolderForButton( JButton button, JPanel mainPanel )
+  public void toggleColumns( int activeColumn, boolean state )
+  {
+    if ( activeColumn == 3 )
+    {
+      // toggle the selection option for buttons not in the parent column
+      for ( int i = 0; i < 5; i++ )
+        fiveColumn[i].setEnabled(state);
+      
+      for ( int i = 0; i < 7; i++ )
+        sevenColumn[i].setEnabled(state);
+    }
+    else if ( activeColumn == 5 )
+    {
+      for ( int i = 0; i < 3; i++ )
+        threeColumn[i].setEnabled(state);
+      
+      for ( int i = 0; i < 7; i++ )
+        sevenColumn[i].setEnabled(state);
+    }
+    else if ( activeColumn == 7 )
+    {
+      for ( int i = 0; i < 3; i++ )
+        threeColumn[i].setEnabled(state);
+      
+      for ( int i = 0; i < 5; i++ )
+        fiveColumn[i].setEnabled(state);
+    }
+  }
+  
+  public void addPlaceHolderForButton( XButton button, JPanel mainPanel )
   {
     // create the JPanel that will be taking the place of the button in the GBLayout
     JPanel placeHolder = new JPanel();
