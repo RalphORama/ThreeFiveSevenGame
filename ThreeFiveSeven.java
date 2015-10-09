@@ -31,7 +31,10 @@ public class ThreeFiveSeven extends JFrame
   public ThreeFiveSeven()
   {
     super("Three Five Seven game");
-    
+  }
+  
+  public void setup()
+  {
     // use for loops to create buttons and add them to their respective arrays
     for ( int i = 0; i < 3; i++ )
     {
@@ -120,10 +123,42 @@ public class ThreeFiveSeven extends JFrame
     constraints.weightx = 0;
     constraints.weighty = 0;
     p.add(reset, constraints);
-    
-    
+  }
+  
+  public void start(ThreeFiveSeven game)
+  {
     // add the container to the pane, in the center of it.
     c.add(p, BorderLayout.CENTER);
+    
+    // set the size of the game window
+    game.setSize(600, 900);
+    // make it so people can't make the window too small
+    game.setMinimumSize( new Dimension(350, 500) );
+    // make the game quit when the player closes the window
+    game.setDefaultCloseOperation(EXIT_ON_CLOSE);
+    // since gridbag is flexible, the player can resize the window all they want
+    game.setResizable(true);
+    // put everything together
+    game.pack();
+    // center the window on the screen
+    game.setLocationRelativeTo(null);
+    // show the window
+    game.setVisible(true);
+  }
+  
+  public void restart()
+  {
+    this.dispose();
+    
+    String[] args = {};
+      
+      try {
+        this.main(args);
+      }
+      catch (Exception ex)
+      {
+        System.out.println(ex);
+      }
   }
   
   public void actionPerformed(ActionEvent e)
@@ -133,20 +168,14 @@ public class ThreeFiveSeven extends JFrame
       // fires when the checkbox to select multiple is clicked
       AbstractButton abutton = (AbstractButton) e.getSource();
       this.multiSelectState = abutton.getModel().isSelected();
+      
+      if (this.multiSelectState)
+        JOptionPane.showMessageDialog(null, "Not working yet.");
     }
     
     if ( e.getActionCommand() == "Reset" )
     {
-      this.dispose();
-      String[] args = {};
-      
-      try {
-        this.main(args);
-      }
-      catch (Exception ex)
-      {
-        System.out.println(ex);
-      }
+      this.restart();
     }
     
     // if one of the numbered buttons is clicked
@@ -155,7 +184,7 @@ public class ThreeFiveSeven extends JFrame
       // if a button is clicked and multiple select is enabled
       if ( multiSelectState )
       {
-        JButton b   = (JButton)e.getSource();
+        JButton b = (JButton)e.getSource();
       }
       
       // if a button is clicked and multi-select isn't enabled
@@ -196,19 +225,7 @@ public class ThreeFiveSeven extends JFrame
     
     // create a new instance of the game
     ThreeFiveSeven game = new ThreeFiveSeven();
-    // set the size of the game window
-    game.setSize(600, 900);
-    // make it so people can't make the window too small
-    game.setMinimumSize( new Dimension(350, 500) );
-    // make the game quit when the player closes the window
-    game.setDefaultCloseOperation(EXIT_ON_CLOSE);
-    // since gridbag is flexible, the player can resize the window all they want
-    game.setResizable(true);
-    // put everything together
-    game.pack();
-    // center the window on the screen
-    game.setLocationRelativeTo(null);
-    // show the window
-    game.setVisible(true);
+    game.setup();
+    game.start(game);
   }
 }
