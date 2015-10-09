@@ -1,3 +1,6 @@
+package ThreeFiveSeven;
+import ThreeFiveSeven.*;
+
 // TODO: Implement turn system
 
 import java.awt.*;
