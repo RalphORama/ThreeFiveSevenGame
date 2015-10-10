@@ -17,6 +17,7 @@ These are the features that I'd like to add (in order of importance).
 - [ ] Automatic detection of when a game is done (i.e. only one square left).
 - [ ] Disable tabbing through squares.
 - [ ] Make window respawn in same position (rather than center of screen) when reset button is clicked.
+- [ ] Custom names for each player, rather than just "Player 1" and "Player 2"
 
 ####Compiling:
 ```
