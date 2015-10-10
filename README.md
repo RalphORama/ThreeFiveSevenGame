@@ -23,7 +23,7 @@ These are the features that I'd like to add (in order of importance).
 ####Compiling:
 ```
 mkdir ThreeFiveSeven && cd ThreeFiveSeven
-git clone -b v1.0 https://github.com/RalphORama/ThreeFiveSevenGame.git .
+git clone https://github.com/RalphORama/ThreeFiveSevenGame.git .
 javac ThreeFiveSeven.java XButton.java
 jar -cef ThreeFiveSeven.ThreeFiveSeven ThreeFiveSeven.jar -C . .
 java -jar ThreeFiveSeven.jar
