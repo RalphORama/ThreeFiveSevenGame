@@ -1,4 +1,4 @@
-# ThreeFiveSevenGame v1.0   
+# ThreeFiveSevenGame v1.1   
 ####A small mathematical game made in Java.
 ![Main Game Window](http://i.imgur.com/C18on2b.png)
 ###[Download Here!](https://github.com/RalphORama/ThreeFiveSevenGame/releases/tag/v1.0)
