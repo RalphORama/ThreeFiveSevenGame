@@ -1,4 +1,4 @@
-# ThreeFiveSevenGame v0.1   
+# ThreeFiveSevenGame v1.0   
 A simple mathematical game made in Java
 This is a simple program for a game I was recently taught how to play. 
 
@@ -11,5 +11,3 @@ The rules are simple:
 The object of the game is to erase squares in such a way that, at the end of the match, your opponent is left with only one square.
 
 This project needs no special libraries to compile, just JDK 8.
-
-##### NB: I've just begun learning Java, so if this code is incredibly terrible, please don't think of me too harshly. I swear, I'm good at coding.
