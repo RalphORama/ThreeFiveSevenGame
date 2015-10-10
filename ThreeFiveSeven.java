@@ -9,30 +9,32 @@ import javax.swing.plaf.*;
 import javax.swing.plaf.metal.*;
 import javax.swing.border.*;
 
-public class ThreeFiveSeven extends JFrame
+public class ThreeFiveSeven extends JFrame 
   implements ActionListener
 {
   // content pane, panel, gridbag, and checkbox are all public variables of this class,
   // this makes modifying their properties later quite easy.
-  Container c = getContentPane();
-  JPanel p = new JPanel();
+  private Container c       = getContentPane();
+  private JPanel    p       = new JPanel();
   
-  GridBagConstraints constraints = new GridBagConstraints();
+  private GridBagConstraints constraints = new GridBagConstraints();
   
   // create arrays of buttons so we can easily procedually add them to
   // the GridBag later
-  XButton[] threeColumn = new XButton[3];
-  XButton[] fiveColumn  = new XButton[5];
-  XButton[] sevenColumn = new XButton[7];
-  JButton   reset       = new JButton("Reset");
-  JCheckBox selectMultipleBox = new JCheckBox("Select Multiple", null, false);
-  JPanel    turnPanel   = new JPanel();
-  JLabel    turnLabel   = new JLabel("Player 1's turn");
+  private XButton[] threeColumn = new XButton[3];
+  private XButton[] fiveColumn  = new XButton[5];
+  private XButton[] sevenColumn = new XButton[7];
+  private JButton   reset       = new JButton("Reset");
+  private JCheckBox selectMultipleBox = new JCheckBox("Select Multiple", null, false);
+  private JPanel    turnPanel   = new JPanel();
+  private JLabel    turnLabel   = new JLabel("");
   
-  boolean buttonRemoved = false;
-  
-  // private fields
   private boolean multiSelectState = false;
+  private boolean buttonRemoved    = false;
+  private boolean whoseTurn        = false; // false for Player 1, true for Player 2
+  private int     buttonsRemaining = 0;
+  private String  playerOneName    = "Player 1";
+  private String  playerTwoName    = "Player 2";
   
   public ThreeFiveSeven()
   {
@@ -72,13 +74,15 @@ public class ThreeFiveSeven extends JFrame
       constraints.gridx = 0;
       // add to each row, but pad so all buttons are aligned to the bottom of the grid,
       // rather than the top
-      constraints.gridy = 4 + i;
+      constraints.gridy      = 4 + i;
       constraints.gridwidth  = 1;
       constraints.gridheight = 1;
       // fill all available area
       constraints.fill = GridBagConstraints.BOTH;
       p.add(threeColumn[i], constraints);
       threeColumn[i].setPreferredSize(new Dimension(100, 50));
+      // increment the number of buttons remaining by one
+      this.buttonsRemaining += 1;
     }
     for ( int i = 0; i < 5; i++ )
     {
@@ -89,9 +93,10 @@ public class ThreeFiveSeven extends JFrame
       
       constraints.gridx = 1;
       constraints.gridy = 2 + i;
-      constraints.fill = GridBagConstraints.BOTH;
+      constraints.fill  = GridBagConstraints.BOTH;
       p.add(fiveColumn[i], constraints);
       fiveColumn[i].setPreferredSize(new Dimension(100, 50));
+      this.buttonsRemaining += 1;
     }
     for ( int i = 0; i < 7; i++ )
     {
@@ -102,16 +107,17 @@ public class ThreeFiveSeven extends JFrame
       
       constraints.gridx = 2;
       constraints.gridy = i;
-      constraints.fill = GridBagConstraints.BOTH;
+      constraints.fill  = GridBagConstraints.BOTH;
       p.add(sevenColumn[i], constraints);
       sevenColumn[i].setPreferredSize(new Dimension(100, 50));
+      this.buttonsRemaining += 1;
     }
     
     // add the checkbox for selecting multiple boxes at a time
     constraints.gridwidth = 2;
-    constraints.gridx = 0;
-    constraints.gridy = 8;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridx     = 0;
+    constraints.gridy     = 8;
+    constraints.fill      = GridBagConstraints.HORIZONTAL;
     p.add(selectMultipleBox, constraints);
     // add an actionlistener to the checkbox
     selectMultipleBox.addActionListener(this);
@@ -119,21 +125,22 @@ public class ThreeFiveSeven extends JFrame
     // add the reset button
     reset.addActionListener(this);
     constraints.gridwidth = 1;
-    constraints.gridx = 2;
-    constraints.gridy = 8;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.weightx = 0;
-    constraints.weighty = 0;
+    constraints.gridx     = 2;
+    constraints.gridy     = 8;
+    constraints.fill      = GridBagConstraints.HORIZONTAL;
+    constraints.weightx   = 0;
+    constraints.weighty   = 0;
     p.add(reset, constraints);
     
     // add the turn indicator and label
     constraints.gridwidth = 3;
-    constraints.gridx = 0;
-    constraints.gridy = 9;
-    constraints.weightx = 1;
-    constraints.weighty = 1;
-    constraints.fill = GridBagConstraints.BOTH;
+    constraints.gridx     = 0;
+    constraints.gridy     = 9;
+    constraints.weightx   = 1;
+    constraints.weighty   = 1;
+    constraints.fill      = GridBagConstraints.BOTH;
     p.add(turnPanel, constraints);
+    turnLabel.setText( playerOneName + "'s turn" );
     turnPanel.add(turnLabel, BorderLayout.CENTER);
   }
   
@@ -175,17 +182,30 @@ public class ThreeFiveSeven extends JFrame
   
   public void actionPerformed(ActionEvent e)
   {
-    
     if ( e.getActionCommand() == "Reset" )
     {
-      this.restart();
+      if ( this.buttonsRemaining != 0 )
+      {
+        // confirm that the players really do want to restart
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        int dialogResult = JOptionPane.showConfirmDialog( p, "Do you really want to restart?", 
+                                                         "Warning", dialogButton );
+        if ( dialogResult == JOptionPane.YES_OPTION )
+        {
+          this.restart();
+        }
+      }
+      else
+      {
+        this.restart();
+      }
     }
     
     if ( e.getActionCommand() == "Select Multiple" )
     {
       // fires when the checkbox to select multiple is clicked
       AbstractButton abutton = (AbstractButton) e.getSource();
-      this.multiSelectState = abutton.getModel().isSelected();
+      this.multiSelectState  = abutton.getModel().isSelected();
       
       if ( multiSelectState == false )
       {
@@ -222,6 +242,23 @@ public class ThreeFiveSeven extends JFrame
         addPlaceHolderForButton( button, p );
         turnChange();
       }
+    }
+    
+    if ( this.buttonsRemaining == 1 )
+    {
+      toggleColumns( 3, false );
+      toggleColumns( 7, false );
+      this.selectMultipleBox.setEnabled(false);
+      this.turnLabel.setText("Game over!");
+      
+      if ( !whoseTurn ) // if it's player 1's turn
+        JOptionPane.showMessageDialog( p, playerTwoName + " wins!", 
+                                       "Game over!", JOptionPane.WARNING_MESSAGE );
+      else
+        JOptionPane.showMessageDialog( p, playerOneName + " wins!", 
+                                       "Game over!", JOptionPane.WARNING_MESSAGE );
+      
+      this.buttonsRemaining = 0; // to prevent the message from being displayed twice
     }
   }
   
@@ -272,14 +309,21 @@ public class ThreeFiveSeven extends JFrame
     // redraw the window
     mainPanel.revalidate();
     mainPanel.repaint();
+    this.buttonsRemaining -= 1;
   }
   
   public void turnChange()
   {
-    if ( turnLabel.getText() == "Player 1's turn" )
-      turnLabel.setText("Player 2's turn");
+    if ( this.whoseTurn == false ) // if it's player one's turn
+    {
+      turnLabel.setText(playerTwoName + "'s turn");
+      this.whoseTurn = true;
+    }
     else
-      turnLabel.setText("Player 1's turn");
+    {
+      turnLabel.setText(playerOneName + "'s turn");
+      this.whoseTurn = false;
+    }
   }
   
   public static void main(String[] args) throws Exception
