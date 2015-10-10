@@ -1,6 +1,6 @@
 # ThreeFiveSevenGame v1.1   
 ####A small mathematical game made in Java.
-![Main Game Window](http://i.imgur.com/C18on2b.png)
+![Main Game Window](http://i.imgur.com/pjAW08l.gif)
 ###[Download Here!](https://github.com/RalphORama/ThreeFiveSevenGame/releases/tag/v1.0)
 
 ####The rules are simple:
