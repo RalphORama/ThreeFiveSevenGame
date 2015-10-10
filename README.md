@@ -1,13 +1,19 @@
 # ThreeFiveSevenGame v1.0   
-A simple mathematical game made in Java
-This is a simple program for a game I was recently taught how to play. 
+####A small mathematical game made in Java.
+![Main Game Window](http://i.imgur.com/C18on2b.png)
 
-The rules are simple:
+####The rules are simple:
 - Two players per game.
-- Players can flip a coin, play Scissors, Paper, Rock, etc to determine who goes first.
-- During the player's turn, they can erase any amount of squares in a column.
+- Players can flip a coin, play Scissors/Paper/Rock, etc. to determine who goes first.
+- During a player's turn, they can erase any amount of squares in a column.
 - Players cannot erase squares from more than one column per turn.
+- The goal is to erase squares in such a way that your opponent is left with one square when their turn begins.
 
-The object of the game is to erase squares in such a way that, at the end of the match, your opponent is left with only one square.
-
-This project needs no special libraries to compile, just JDK 8.
+####Compiling:
+```
+mkdir ThreeFiveSeven && cd ThreeFiveSeven
+git clone -b v1.0 https://github.com/RalphORama/ThreeFiveSevenGame.git .
+javac ThreeFiveSeven.java XButton.java
+jar -cef ThreeFiveSeven.ThreeFiveSeven ThreeFiveSeven.jar -C . .
+java -jar ThreeFiveSeven.jar
+```
