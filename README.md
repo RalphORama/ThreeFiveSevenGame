@@ -9,6 +9,15 @@
 - Players cannot erase squares from more than one column per turn.
 - The goal is to erase squares in such a way that your opponent is left with one square when their turn begins.
 
+####Roadmap:
+These are the features that I'd like to add (in order of importance).
+
+- [x] Turn system.
+- [ ] Confirmation prompt when 'restart' button is clicked.
+- [ ] Automatic detection of when a game is done (i.e. only one square left).
+- [ ] Disable tabbing through squares.
+- [ ] Make window respawn in same position (rather than center of screen) when reset button is clicked.
+
 ####Compiling:
 ```
 mkdir ThreeFiveSeven && cd ThreeFiveSeven
