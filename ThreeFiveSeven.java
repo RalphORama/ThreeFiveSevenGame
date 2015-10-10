@@ -1,5 +1,5 @@
 package ThreeFiveSeven;
-import ThreeFiveSeven.*;
+import ThreeFiveSeven.XButton;
 
 // TODO: Implement turn system
 
@@ -27,8 +27,11 @@ public class ThreeFiveSeven extends JFrame
   XButton[] fiveColumn  = new XButton[5];
   XButton[] sevenColumn = new XButton[7];
   JButton   reset       = new JButton("Reset");
-  
   JCheckBox selectMultipleBox = new JCheckBox("Select Multiple", null, false);
+  JPanel    turnPanel   = new JPanel();
+  JLabel    turnLabel   = new JLabel("Player 1's turn");
+  
+  boolean buttonRemoved = false;
   
   // private fields
   private boolean multiSelectState = false;
@@ -124,6 +127,16 @@ public class ThreeFiveSeven extends JFrame
     constraints.weightx = 0;
     constraints.weighty = 0;
     p.add(reset, constraints);
+    
+    // add the turn indicator and label
+    constraints.gridwidth = 3;
+    constraints.gridx = 0;
+    constraints.gridy = 9;
+    constraints.weightx = 1;
+    constraints.weighty = 1;
+    constraints.fill = GridBagConstraints.BOTH;
+    p.add(turnPanel, constraints);
+    turnPanel.add(turnLabel, BorderLayout.CENTER);
   }
   
   public void start(ThreeFiveSeven game)
@@ -164,6 +177,12 @@ public class ThreeFiveSeven extends JFrame
   
   public void actionPerformed(ActionEvent e)
   {
+    
+    if ( e.getActionCommand() == "Reset" )
+    {
+      this.restart();
+    }
+    
     if ( e.getActionCommand() == "Select Multiple" )
     {
       // fires when the checkbox to select multiple is clicked
@@ -174,12 +193,13 @@ public class ThreeFiveSeven extends JFrame
       {
         toggleColumns( 3, true );
         toggleColumns( 7, true );
+        
+        if (this.buttonRemoved)
+        {
+          this.buttonRemoved = false;
+          turnChange();
+        }
       }
-    }
-    
-    if ( e.getActionCommand() == "Reset" )
-    {
-      this.restart();
     }
     
     // if one of the numbered buttons is clicked
@@ -191,6 +211,8 @@ public class ThreeFiveSeven extends JFrame
         // get what column the XButton is in, then disable all the other buttons
         XButton b = (XButton)e.getSource();
         toggleColumns( b.getColumn(), false );
+        addPlaceHolderForButton( b, p );
+        this.buttonRemoved = true;
       }
       
       // if a button is clicked and multi-select isn't enabled
@@ -200,6 +222,7 @@ public class ThreeFiveSeven extends JFrame
         XButton button = (XButton)e.getSource();
         
         addPlaceHolderForButton( button, p );
+        turnChange();
       }
     }
   }
@@ -251,6 +274,14 @@ public class ThreeFiveSeven extends JFrame
     // redraw the window
     mainPanel.revalidate();
     mainPanel.repaint();
+  }
+  
+  public void turnChange()
+  {
+    if ( turnLabel.getText() == "Player 1's turn" )
+      turnLabel.setText("Player 2's turn");
+    else
+      turnLabel.setText("Player 1's turn");
   }
   
   public static void main(String[] args) throws Exception
