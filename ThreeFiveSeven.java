@@ -19,16 +19,16 @@ public class ThreeFiveSeven extends JFrame
   
   private GridBagConstraints constraints = new GridBagConstraints();
   
-  // create arrays of buttons so we can easily procedually add them to
-  // the GridBag later
+  // create arrays of buttons so we can easily procedually add them to the GridBag later
   private XButton[] threeColumn = new XButton[3];
   private XButton[] fiveColumn  = new XButton[5];
   private XButton[] sevenColumn = new XButton[7];
+  // add the various GUI elements
   private JButton   reset       = new JButton("Reset");
   private JCheckBox selectMultipleBox = new JCheckBox("Select Multiple", null, false);
   private JPanel    turnPanel   = new JPanel();
   private JLabel    turnLabel   = new JLabel("");
-  
+  // private fields for turns, player names, etc
   private boolean multiSelectState = false;
   private boolean buttonRemoved    = false;
   private boolean whoseTurn        = false; // false for Player 1, true for Player 2
@@ -45,6 +45,28 @@ public class ThreeFiveSeven extends JFrame
   {
     // set up content pane
     c.setBackground(Color.white);
+    
+    // HACK:
+    // add a menubar to the content pane
+    JMenuBar  menuBar  = new JMenuBar();
+    JMenu     helpMenu = new JMenu("Help");
+    JMenu     gameMenu = new JMenu("Game");
+    JMenuItem help, about, changeNames, restart;
+    
+    menuBar.add(gameMenu);
+    menuBar.add(helpMenu);
+    
+    help  = new JMenuItem("Instructions");
+    about = new JMenuItem("About");
+    helpMenu.add(help);
+    helpMenu.add(about);
+    
+    changeNames = new JMenuItem("Change Names");
+    restart     = new JMenuItem("Restart Game");
+    gameMenu.add(changeNames);
+    gameMenu.add(restart);
+    
+    c.add(menuBar, BorderLayout.NORTH);
     
     // create a gridbaglayout to easily organize all our buttons, etc
     p.setLayout(new GridBagLayout());
@@ -114,12 +136,12 @@ public class ThreeFiveSeven extends JFrame
     }
     
     // add the checkbox for selecting multiple boxes at a time
-    constraints.gridwidth = 2;
+    constraints.gridwidth = 2; // the text is kind of long, so we give it extra space
     constraints.gridx     = 0;
-    constraints.gridy     = 8;
+    constraints.gridy     = 8; // it resides below everything else
     constraints.fill      = GridBagConstraints.HORIZONTAL;
     p.add(selectMultipleBox, constraints);
-    // add an actionlistener to the checkbox
+    // make the checkbox listen for click events
     selectMultipleBox.addActionListener(this);
     
     // add the reset button
@@ -140,7 +162,12 @@ public class ThreeFiveSeven extends JFrame
     constraints.weighty   = 1;
     constraints.fill      = GridBagConstraints.BOTH;
     p.add(turnPanel, constraints);
+    // set up the font for the label so it's bold
+    // changing the font size just made it look weird, so I'm using bold instead
+    Font labelFont = turnLabel.getFont();
+    turnLabel.setFont( new Font(labelFont.getName(), Font.BOLD, labelFont.getSize()) );
     turnLabel.setText( playerOneName + "'s turn" );
+    
     turnPanel.add(turnLabel, BorderLayout.CENTER);
   }
   
