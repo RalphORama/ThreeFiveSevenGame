@@ -1,8 +1,6 @@
 package ThreeFiveSeven;
 import ThreeFiveSeven.XButton;
 
-// TODO: Implement turn system
-
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
