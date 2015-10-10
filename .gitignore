@@ -14,4 +14,3 @@ hs_err_pid*
 # Dr. Java files
 *.java~
 bin/*
-*.drjava
