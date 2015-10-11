@@ -2,12 +2,8 @@ package ThreeFiveSeven;
 import ThreeFiveSeven.XButton;
 
 import java.awt.*;
-import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.plaf.*;
-import javax.swing.plaf.metal.*;
-import javax.swing.border.*;
 
 public class ThreeFiveSeven extends JFrame 
   implements ActionListener
@@ -40,10 +36,14 @@ public class ThreeFiveSeven extends JFrame
   private String    playerOneName    = "Player 1";
   private String    playerTwoName    = "Player 2";
   // all the strings for pop-up dialogs
-  private final String instructions  = "<html><body><h1>Instructions</h1>"
-    + "<p>Here are some instructions that I will write later, you can thank "
-    + "me for that.</p>"
-    + "<p>Here is some more text. It will be much more descriptive. Hehhehehe</p>"
+  private final String instructions  = "<html><body style='width: 350px;'>"
+    + "<h1>Instructions</h1>"
+    + "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus, magna quis maximus mattis, sem felis "
+    + "mattis lacus, quis molestie urna sem nec massa. Vestibulum nec ex mauris. Fusce mauris eros, porttitor in nisl "
+    + "sit amet, vehicula semper odio. </p>"
+    + "<p>Proin a eleifend tellus, sit amet congue tortor. Aliquam eu lectus dui. Pellentesque aliquet massa ut "
+    + "quam aliquet feugiat. Nullam nec purus sit amet odio ornare ultricies. Nam efficitur odio sit amet leo "
+    + "tincidunt, a venenatis neque hendrerit.</p>"
     + "</body></html>";
   private final String information   = "<html><body>"
     + "<p>Three Five Seven game by Ralph Drake</p>"
@@ -179,18 +179,14 @@ public class ThreeFiveSeven extends JFrame
       @Override
       public void actionPerformed( ActionEvent e )
       {
-        // TODO: Possibly define a max size for this. 
-        // Not sure how big it can get
-        JOptionPane.showMessageDialog( p, instructions, "Instructions", 
-                                       JOptionPane.INFORMATION_MESSAGE );
+        JOptionPane.showMessageDialog( p, instructions, "Instructions", JOptionPane.INFORMATION_MESSAGE );
       }
     });
     this.about = new JMenuItem(new AbstractAction("About") {
       @Override
       public void actionPerformed( ActionEvent e )
       {
-        JOptionPane.showMessageDialog( p, information, "Information",
-                                       JOptionPane.INFORMATION_MESSAGE );
+        JOptionPane.showMessageDialog( p, information, "Information", JOptionPane.INFORMATION_MESSAGE );
       }
     });
     this.helpMenu.add(help);
@@ -201,7 +197,22 @@ public class ThreeFiveSeven extends JFrame
       @Override
       public void actionPerformed( ActionEvent e )
       {
-        // TODO: Add a message box here to change both player's names.
+        JTextField p1Name = new JTextField("Player 1", 8);
+        JTextField p2Name = new JTextField("Player 2", 8);
+        
+        JPanel nameChangePanel = new JPanel( new GridLayout(2, 2, 0, 2) );
+        nameChangePanel.add( new JLabel("Player 1 Name: ", SwingConstants.CENTER) );
+        nameChangePanel.add(p1Name);
+        nameChangePanel.add( new JLabel("Player 2 Name: ", SwingConstants.CENTER) );
+        nameChangePanel.add(p2Name);
+        
+        int result = JOptionPane.showConfirmDialog(p, nameChangePanel, "Changing names...", 
+                                                   JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE );
+        if (result == JOptionPane.OK_OPTION)
+        {
+          playerOneName = String.format( "%1.10s", p1Name.getText() );
+          playerTwoName = String.format( "%1.10s", p2Name.getText() );
+        }
       }
     });
     this.restart = new JMenuItem(new AbstractAction("Restart Game") {
@@ -263,8 +274,8 @@ public class ThreeFiveSeven extends JFrame
       // confirm that the players really do want to restart
       int dialogButton = JOptionPane.YES_NO_OPTION;
       int dialogResult = 
-        JOptionPane.showConfirmDialog( p, "Do you really want to restart?", 
-                                      "Warning!", dialogButton, JOptionPane.WARNING_MESSAGE );
+        JOptionPane.showConfirmDialog( p, "Do you really want to restart?",  "Warning!",  dialogButton, 
+                                       JOptionPane.WARNING_MESSAGE );
       if ( dialogResult == JOptionPane.YES_OPTION )
       {
         this.restart();
@@ -332,11 +343,9 @@ public class ThreeFiveSeven extends JFrame
       this.turnLabel.setText("Game over!");
       
       if ( !whoseTurn ) // if it's player 1's turn
-        JOptionPane.showMessageDialog( p, playerTwoName + " wins!", 
-                                       "Game over!", JOptionPane.WARNING_MESSAGE );
+        JOptionPane.showMessageDialog( p, playerTwoName + " wins!", "Game over!", JOptionPane.WARNING_MESSAGE );
       else
-        JOptionPane.showMessageDialog( p, playerOneName + " wins!", 
-                                       "Game over!", JOptionPane.WARNING_MESSAGE );
+        JOptionPane.showMessageDialog( p, playerOneName + " wins!", "Game over!", JOptionPane.WARNING_MESSAGE );
       
       this.buttonsRemaining = 0; // to prevent the message from being displayed twice
     }

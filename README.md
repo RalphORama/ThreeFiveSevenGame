@@ -1,4 +1,4 @@
-# ThreeFiveSevenGame v1.1   
+# ThreeFiveSevenGame v1.2   
 ####A small mathematical game made in Java.
 ![Main Game Window](http://i.imgur.com/pjAW08l.gif)
 ###[Download Here!](https://github.com/RalphORama/ThreeFiveSevenGame/releases/latest)
@@ -13,12 +13,8 @@
 ####Roadmap:
 These are the features that I'd like to add (in order of importance).
 
-- [x] Turn system.
-- [x] Confirmation prompt when 'restart' button is clicked.
-- [x] Automatic detection of when a game is done (i.e. only one square left).
 - [ ] Disable tabbing through squares.
 - [ ] Make window respawn in same position (rather than center of screen) when reset button is clicked.
-- [ ] Custom names for each player, rather than just "Player 1" and "Player 2"
 
 ####Compiling:
 ```
