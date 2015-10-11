@@ -16,9 +16,8 @@ public class ThreeFiveSeven extends JFrame
   // this makes modifying their properties later quite easy.
   private Container c       = getContentPane();
   private JPanel    p       = new JPanel();
-  
+  // the constraints used for layout in the main game
   private GridBagConstraints constraints = new GridBagConstraints();
-  
   // create arrays of buttons so we can easily procedually add them to the GridBag later
   private XButton[] threeColumn = new XButton[3];
   private XButton[] fiveColumn  = new XButton[5];
@@ -28,13 +27,27 @@ public class ThreeFiveSeven extends JFrame
   private JCheckBox selectMultipleBox = new JCheckBox("Select Multiple", null, false);
   private JPanel    turnPanel   = new JPanel();
   private JLabel    turnLabel   = new JLabel("");
+  // Menu bar, menus, and submenus
+  private JMenuBar  menuBar     = new JMenuBar();
+  private JMenu     helpMenu    = new JMenu("Help");
+  private JMenu     gameMenu    = new JMenu("Game");
+  private JMenuItem help, about, changeNames, restart;
   // private fields for turns, player names, etc
-  private boolean multiSelectState = false;
-  private boolean buttonRemoved    = false;
-  private boolean whoseTurn        = false; // false for Player 1, true for Player 2
-  private int     buttonsRemaining = 0;
-  private String  playerOneName    = "Player 1";
-  private String  playerTwoName    = "Player 2";
+  private boolean   multiSelectState = false;
+  private boolean   buttonRemoved    = false;
+  private boolean   whoseTurn        = false; // false for Player 1, true for Player 2
+  private int       buttonsRemaining = 0;
+  private String    playerOneName    = "Player 1";
+  private String    playerTwoName    = "Player 2";
+  // all the strings for pop-up dialogs
+  private final String instructions  = "<html><body><h1>Instructions</h1>"
+    + "<p>Here are some instructions that I will write later, you can thank "
+    + "me for that.</p>"
+    + "<p>Here is some more text. It will be much more descriptive. Hehhehehe</p>"
+    + "</body></html>";
+  private final String information   = "<html><body>"
+    + "<p>Three Five Seven game by Ralph Drake</p>"
+    + "</body></html>";
   
   public ThreeFiveSeven()
   {
@@ -46,25 +59,7 @@ public class ThreeFiveSeven extends JFrame
     // set up content pane
     c.setBackground(Color.white);
     
-    // HACK:
-    // add a menubar to the content pane
-    JMenuBar  menuBar  = new JMenuBar();
-    JMenu     helpMenu = new JMenu("Help");
-    JMenu     gameMenu = new JMenu("Game");
-    JMenuItem help, about, changeNames, restart;
-    
-    menuBar.add(gameMenu);
-    menuBar.add(helpMenu);
-    
-    help  = new JMenuItem("Instructions");
-    about = new JMenuItem("About");
-    helpMenu.add(help);
-    helpMenu.add(about);
-    
-    changeNames = new JMenuItem("Change Names");
-    restart     = new JMenuItem("Restart Game");
-    gameMenu.add(changeNames);
-    gameMenu.add(restart);
+    menuSetup();
     
     c.add(menuBar, BorderLayout.NORTH);
     
@@ -171,6 +166,59 @@ public class ThreeFiveSeven extends JFrame
     turnPanel.add(turnLabel, BorderLayout.CENTER);
   }
   
+  // menu setup has its own function because actionlisteners
+  // are a royal pain in my royal behind
+  public void menuSetup()
+  {
+    // set how the menus are activated when alt+key is pressed
+    this.helpMenu.setMnemonic(KeyEvent.VK_H);
+    this.gameMenu.setMnemonic(KeyEvent.VK_G);
+    
+    // Create the new Menu Items for the help menu
+    this.help = new JMenuItem(new AbstractAction("Instructions") {
+      @Override
+      public void actionPerformed( ActionEvent e )
+      {
+        // TODO: Possibly define a max size for this. 
+        // Not sure how big it can get
+        JOptionPane.showMessageDialog( p, instructions, "Instructions", 
+                                       JOptionPane.INFORMATION_MESSAGE );
+      }
+    });
+    this.about = new JMenuItem(new AbstractAction("About") {
+      @Override
+      public void actionPerformed( ActionEvent e )
+      {
+        JOptionPane.showMessageDialog( p, information, "Information",
+                                       JOptionPane.INFORMATION_MESSAGE );
+      }
+    });
+    this.helpMenu.add(help);
+    this.helpMenu.add(about);
+    
+    // create the new Menu Items for the game menu
+    this.changeNames = new JMenuItem(new AbstractAction("Change Names") {
+      @Override
+      public void actionPerformed( ActionEvent e )
+      {
+        // TODO: Add a message box here to change both player's names.
+      }
+    });
+    this.restart = new JMenuItem(new AbstractAction("Restart Game") {
+      @Override
+      public void actionPerformed( ActionEvent e )
+      {
+        shouldPromptRestart();
+      }
+    });
+    this.gameMenu.add(changeNames);
+    this.gameMenu.add(restart);
+    
+    // add the menus to the menubar
+    this.menuBar.add(gameMenu);
+    this.menuBar.add(helpMenu);
+  }
+  
   public void start(ThreeFiveSeven game)
   {
     // add the container to the pane, in the center of it.
@@ -185,6 +233,7 @@ public class ThreeFiveSeven extends JFrame
     // since gridbag is flexible, the player can resize the window all they want
     game.setResizable(true);
     // put everything together
+    game.validate();
     game.pack();
     // center the window on the screen
     game.setLocationRelativeTo(null);
@@ -207,26 +256,30 @@ public class ThreeFiveSeven extends JFrame
       }
   }
   
-  public void actionPerformed(ActionEvent e)
+  public void shouldPromptRestart()
   {
-    if ( e.getActionCommand() == "Reset" )
+    if ( this.buttonsRemaining != 0 )
     {
-      if ( this.buttonsRemaining != 0 )
-      {
-        // confirm that the players really do want to restart
-        int dialogButton = JOptionPane.YES_NO_OPTION;
-        int dialogResult = JOptionPane.showConfirmDialog( p, "Do you really want to restart?", 
-                                                         "Warning", dialogButton );
-        if ( dialogResult == JOptionPane.YES_OPTION )
-        {
-          this.restart();
-        }
-      }
-      else
+      // confirm that the players really do want to restart
+      int dialogButton = JOptionPane.YES_NO_OPTION;
+      int dialogResult = 
+        JOptionPane.showConfirmDialog( p, "Do you really want to restart?", 
+                                      "Warning!", dialogButton, JOptionPane.WARNING_MESSAGE );
+      if ( dialogResult == JOptionPane.YES_OPTION )
       {
         this.restart();
       }
     }
+    else
+    {
+      this.restart();
+    }
+  }
+  
+  public void actionPerformed(ActionEvent e)
+  {
+    if ( e.getActionCommand() == "Reset" )
+      this.shouldPromptRestart();
     
     if ( e.getActionCommand() == "Select Multiple" )
     {
