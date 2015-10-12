@@ -36,17 +36,21 @@ public class ThreeFiveSeven extends JFrame
   private String    playerOneName    = "Player 1";
   private String    playerTwoName    = "Player 2";
   // all the strings for pop-up dialogs
-  private final String instructions  = "<html><body style='width: 350px;'>"
-    + "<h1>Instructions</h1>"
-    + "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis cursus, magna quis maximus mattis, sem felis "
-    + "mattis lacus, quis molestie urna sem nec massa. Vestibulum nec ex mauris. Fusce mauris eros, porttitor in nisl "
-    + "sit amet, vehicula semper odio. </p>"
-    + "<p>Proin a eleifend tellus, sit amet congue tortor. Aliquam eu lectus dui. Pellentesque aliquet massa ut "
-    + "quam aliquet feugiat. Nullam nec purus sit amet odio ornare ultricies. Nam efficitur odio sit amet leo "
-    + "tincidunt, a venenatis neque hendrerit.</p>"
+  private final String instructions = "<html><head><style type='text/css'>li {margin-top: 3px;}</style></head><body style='width: 350px;'>"
+    + "<div style='padding-right: 5px;'>"
+    + "<u><h2>Instructions</h2></u>"
+    + "<ul style='list-style-type:disc;'>"
+    + "<li>This game is designed for two players only. Get a friend or pay a homeless person to play with you.</li>"
+    + "<li>Decide who goes first via friendly agreement, coin flip, or any other means.</li>"
+    + "<li>During a player's turn, they may remove any amount of squares (buttons) from a single column.</li>"
+    + "<li>To remove multiple squares, tick the 'select multiple' checkbox at the bottom left of the window.</li>"
+    + "<li>To end your turn, untick the 'select multiple' checkbox at the bottom left of the window.</li>"
+    + "<li>The goal of the game is to leave your opponent with only one square left when their turn starts. When this happens, you win!</li>"
+    + "</ul></div>"
     + "</body></html>";
-  private final String information   = "<html><body>"
-    + "<p>Three Five Seven game by Ralph Drake</p>"
+  private final String information = "<html><head><style type='text/css'>p {margin-top: 3px;}</style><body>"
+    + "<p>Three Five Seven game by Ralph Drake.</p>"
+    + "<p>Distributed under the MIT License.</p>"
     + "</body></html>";
   
   public ThreeFiveSeven()
