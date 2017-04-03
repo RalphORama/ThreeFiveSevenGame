@@ -1,12 +1,12 @@
-#ThreeFiveSevenGame v1.2
+# ThreeFiveSevenGame v1.2
 
-####A small mathematical game made in Java.
+## A small mathematical game made in Java.
 
 ![Main Game Window](http://i.imgur.com/pjAW08l.gif)
 
-###[Download Here!](https://github.com/RalphORama/ThreeFiveSevenGame/releases/latest)
+## [Download Here!](https://github.com/RalphORama/ThreeFiveSevenGame/releases/latest)
 
-####The rules are simple:
+## The rules are simple:
 
 - Two players per game.
 - Players can flip a coin, play Scissors/Paper/Rock, etc. to determine who goes first.
@@ -14,14 +14,14 @@
 - Players cannot erase squares from more than one column per turn.
 - The goal is to erase squares in such a way that your opponent is left with one square when their turn begins.
 
-####Roadmap:
+## Roadmap:
 
 These are the features that I'd like to add (in order of importance).
 
 - [ ] Disable tabbing through squares.
 - [ ] Make window respawn in same position (rather than center of screen) when reset button is clicked.
 
-####Compiling:
+## Compiling:
 
 ```
 mkdir ThreeFiveSeven && cd ThreeFiveSeven
